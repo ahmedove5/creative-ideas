@@ -21,3 +21,10 @@ Type of users: idea owner, investor, admin .
 - Read and view idea.
 - Add a comment for the idea (EX : i'm intersted)
 - Communicate with idea owner through private chat.
+
+
+# admin:
+-  add, Read, Update, Delete idea.
+-  add, Read, Update, Delete idea owner.
+-  add, Read, Update, Delete investor.
+-  add, Read, Update, Delete profile. 
