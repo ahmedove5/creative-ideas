@@ -10,18 +10,15 @@ Idea:
 Type of users: idea owner, investor, admin .
 
 # idea owner:
-- select city
-- Determine the idea is profit or social .
+-create profile (name,idea,cost,city)
 - add, Read, Update, Delete idea.
-- Write and describe your creative idea .
 - The cost of the project .
-- Communicate with supporters . 
+- Communicate with supporters through private chat . 
 
 
  
  # investor :
 - select city .
-- 
 - Read and view idea.
 - Add a comment for the idea (EX : i'm intersted)
-- Communicate with idea owner .
+- Communicate with idea owner through private chat.
