@@ -10,14 +10,14 @@ Idea:
 Type of users: idea owner, investor, admin .
 
 # idea owner:
-- create profile (name,idea,cost,city)
+- create profile (name,idea,cost)
 - add, Read, Update, Delete idea.
 - Communicate with supporters through private chat . 
 
 
  
  # investor :
-- select city .
+
 - Read and view idea.
 - Add a comment for the idea (EX : i'm intersted)
 - Communicate with idea owner through private chat.
