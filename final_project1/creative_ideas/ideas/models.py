@@ -6,6 +6,11 @@ class Profile(models.Model):
     f_name = models.CharField(max_length=128)
     l_name = models.CharField(max_length=128)
     ideas = models.TextField(max_length=256 )
+  # CHOICES =
+   #(
+    #    ('social', 'social'),
+     #   ('profitability', 'profitability'),)
+
     cost = models.IntegerField(max_length=512)
     idea_owner=models.ForeignKey (User , on_delete=models.CASCADE)
 
