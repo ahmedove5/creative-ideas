@@ -10,9 +10,10 @@ Idea:
 Type of users: idea owner, investor, admin .
 
 # idea owner:
-- create profile (name,idea,cost)
+- create Business idaea (idea,cost)
 - add, Read, Update, Delete idea.
-- Communicate with supporters through private chat . 
+- accept or reject the offers . 
+- can update the offers
 
 
  
@@ -20,7 +21,8 @@ Type of users: idea owner, investor, admin .
 
 - Read and view idea.
 - Add a comment for the idea (EX : i'm intersted)
-- Communicate with idea owner through private chat.
+-  add, Read,  Delete comment to idea.
+
 
 
 # admin:
