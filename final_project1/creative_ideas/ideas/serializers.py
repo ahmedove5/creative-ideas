@@ -15,6 +15,7 @@ class commentSerializer(serializers.ModelSerializer):
         model = Comment
         fields = '__all__'
 
+
 class offersSerializer(serializers.ModelSerializer):
 
     class Meta:

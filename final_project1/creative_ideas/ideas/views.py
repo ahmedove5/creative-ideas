@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from django.contrib.auth.models import User
 from rest_framework.decorators import api_view, authentication_classes, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.request import Request
@@ -17,12 +18,15 @@ from .serializers import business_idaeaSerializer, commentSerializer, offersSeri
 @api_view(['POST'])
 @authentication_classes([JWTAuthentication])
 @permission_classes([IsAuthenticated])
-def add_profile(request : Request):
+def add_Business_idaea(request : Request):
+    '''
+     idea owner add new idea , cost but must be register and login
+    '''
 
     if not request.user.is_authenticated or not request.user.has_perm('ideas.add_business_idaea'):
         return Response({"msg": "Not Allowed"}, status=status.HTTP_401_UNAUTHORIZED)
 
-    request.data.update(user=request.user.id)
+    request.data.update(idea_owner=request.user.id)
     new_Business_idaea = business_idaeaSerializer(data=request.data)
     if new_Business_idaea.is_valid():
         new_Business_idaea.save()
@@ -37,24 +41,34 @@ def add_profile(request : Request):
         return Response( dataResponse, status=status.HTTP_400_BAD_REQUEST)
 
 
+
+
 @api_view(['GET'])
-def list_profile(request : Request):
+def list_Business_idaea(request : Request):
+    '''
+    to view ideas to evrey one
+    '''
     business_idaea = Business_idaea.objects.all()
 
     dataResponse = {
-        "msg" : "List of All profile",
+        "msg" : "List of All business ideas",
         "profiles" : business_idaeaSerializer(instance=business_idaea, many=True).data
     }
 
     return Response(dataResponse)
 
+
+
 @api_view(['PUT'])
 @authentication_classes([JWTAuthentication])
 @permission_classes([IsAuthenticated])
-def update_profile(request : Request, business_id):
+def update_Business_idaea(request : Request, business_id):
+    '''
+    idea owner update new idea , cost but must be register , login and have permission
+    '''
     if not request.user.is_authenticated or not request.user.has_perm('ideas.add_business_idaea'):
         return Response({"msg": "Not Allowed"}, status=status.HTTP_401_UNAUTHORIZED)
-    request.data.update(user=request.user.id)
+    request.data.update(idea_owner=request.user.id)
     business_idaea = Business_idaea.objects.get(id=business_id)
 
     updated_business_idaea = business_idaeaSerializer(instance=business_idaea, data=request.data)
@@ -69,13 +83,18 @@ def update_profile(request : Request, business_id):
         print(updated_business_idaea.errors)
         return Response({"msg" : "bad request, cannot update"}, status=status.HTTP_400_BAD_REQUEST)
 
+
+
 @api_view(['DELETE'])
 @authentication_classes([JWTAuthentication])
 @permission_classes([IsAuthenticated])
-def delete_profile(request: Request, business_id):
+def delete_Business_idaea(request: Request, business_id):
+    '''
+    idea owner delete new idea , cost but must be register , login and have permission
+    '''
     if not request.user.is_authenticated or not request.user.has_perm('ideas.delete_business_idaea'):
         return Response({"msg": "Not Allowed"}, status=status.HTTP_401_UNAUTHORIZED)
-    request.data.update(user=request.user.id)
+    request.data.update(idea_owner=request.user.id)
     profile = Business_idaea.objects.get(id= business_id)
     profile.delete()
     return Response({"msg" : "Deleted Successfully"})
@@ -87,10 +106,13 @@ def delete_profile(request: Request, business_id):
 @authentication_classes([JWTAuthentication])
 @permission_classes([IsAuthenticated])
 def add_comment(request : Request):
+    '''
+    investor add new comment in idea  but must be register , login and have permission
+    '''
 
     if not request.user.is_authenticated or not request.user.has_perm('ideas.add_comment'):
         return Response({"msg" : "Not Allowed"}, status=status.HTTP_401_UNAUTHORIZED)
-    request.data.update(user=request.user.id)
+    request.data.update(investor=request.user.id)
     new_comment = commentSerializer(data=request.data)
     if new_comment.is_valid():
         new_comment.save()
@@ -104,12 +126,22 @@ def add_comment(request : Request):
         dataResponse = {"msg" : "couldn't create a comments"}
         return Response( dataResponse, status=status.HTTP_400_BAD_REQUEST)
 
+
+
 @api_view(['GET'])
+@authentication_classes([JWTAuthentication])
+@permission_classes([IsAuthenticated])
 def list_comment(request : Request):
+    '''
+        investor view comment in idea
+    '''
+    if not request.user.is_authenticated or not request.user.has_perm('ideas.view_comment'):
+        return Response({"msg": "Not Allowed"}, status=status.HTTP_401_UNAUTHORIZED)
+    request.data.update(investor=request.user.id)
     comments = Comment.objects.all()
 
     dataResponse = {
-        "msg" : "List of All investor",
+        "msg" : "List of All comments",
         "investor" : commentSerializer(instance=comments, many=True).data
     }
 
@@ -121,9 +153,12 @@ def list_comment(request : Request):
 @authentication_classes([JWTAuthentication])
 @permission_classes([IsAuthenticated])
 def delete_comment(request: Request, comment_id):
+    '''
+        investor delete comment in idea  but must be register , login and have permission
+    '''
     if not request.user.is_authenticated or not request.user.has_perm('ideas.delete_comment'):
         return Response({"msg": "Not Allowed"}, status=status.HTTP_401_UNAUTHORIZED)
-    request.data.update(user=request.user.id)
+    request.data.update(investor=request.user.id)
     comment = Comment.objects.get(id=comment_id)
     comment.delete()
     return Response({"msg" : "Deleted Successfully"})
@@ -134,11 +169,14 @@ def delete_comment(request: Request, comment_id):
 @authentication_classes([JWTAuthentication])
 @permission_classes([IsAuthenticated])
 def add_offers(request : Request):
+    '''
+        idea owner accept or reject the offers  but must be register , login and have permission
+    '''
 
     if not request.user.is_authenticated or not request.user.has_perm('ideas.add_offers'):
         return Response({"msg": "Not Allowed"}, status=status.HTTP_401_UNAUTHORIZED)
 
-    request.data.update(user=request.user.id)
+    request.data.update(idea_owner=request.user.id)
     new_offers= offersSerializer(data=request.data)
     if new_offers.is_valid():
         new_offers.save()
@@ -153,24 +191,35 @@ def add_offers(request : Request):
         return Response( dataResponse, status=status.HTTP_400_BAD_REQUEST)
 
 
+
 @api_view(['GET'])
 def list_offers(request : Request):
+    '''
+            idea owner accept or view offers
+    '''
+
     offers = Offers.objects.all()
 
     dataResponse = {
-        "msg" : "List of All profile",
+        "msg" : "List of All offers",
         "profiles" : offersSerializer(instance=offers, many=True).data
     }
 
     return Response(dataResponse)
 
+
+
 @api_view(['PUT'])
 @authentication_classes([JWTAuthentication])
 @permission_classes([IsAuthenticated])
-def update_ofers(request : Request, offers_id):
-    if not request.user.is_authenticated or not request.user.has_perm('ideas.update_offers'):
+def update_offers(request : Request, offers_id):
+    '''
+            idea owner update the offers  but must be register , login and have permission
+    '''
+
+    if not request.user.is_authenticated or not request.user.has_perm('ideas.change_offers'):
         return Response({"msg": "Not Allowed"}, status=status.HTTP_401_UNAUTHORIZED)
-    request.data.update(user=request.user.id)
+    request.data.update(idea_owner=request.user.id)
     offers = Offers.objects.get(id=offers_id)
 
     updated_offers= offersSerializer(instance=offers, data=request.data)
@@ -185,16 +234,39 @@ def update_ofers(request : Request, offers_id):
         print(updated_offers.errors)
         return Response({"msg" : "bad request, cannot update"}, status=status.HTTP_400_BAD_REQUEST)
 
+
+
 @api_view(['DELETE'])
 @authentication_classes([JWTAuthentication])
 @authentication_classes([JWTAuthentication])
 def delete_offers(request: Request, offers_id):
+    '''
+            idea owner delete the offers  but must be register , login and have permission
+    '''
+
     if not request.user.is_authenticated or not request.user.has_perm('ideas.delete_offers'):
         return Response({"msg": "Not Allowed"}, status=status.HTTP_401_UNAUTHORIZED)
-    request.data.update(user=request.user.id)
+    request.data.update(idea_owner=request.user.id)
     offers= Offers.objects.get(id= offers_id)
     offers.delete()
     return Response({"msg" : "Deleted Successfully"})
+
+
+
+
+@api_view(['GET'])
+def search_ideas(request : Request ,idea):
+    '''
+    to search about idea
+    '''
+    ideas = Business_idaea.objects.filter(ideas=idea)
+
+    dataResponse = {
+        "msg" : "the idea:",
+        "students" : business_idaeaSerializer(instance=ideas, many=True).data
+    }
+
+    return Response(dataResponse)
 
 
 
