@@ -20,6 +20,7 @@ Type of users: idea owner, investor, admin .
 
 - Read and view idea.
 - Add a comment for the idea (EX : i'm intersted)
+-  add, Read,  Delete comment to idea.
 
 
 
