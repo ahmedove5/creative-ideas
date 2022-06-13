@@ -10,9 +10,10 @@ Idea:
 Type of users: idea owner, investor, admin .
 
 # idea owner:
-- create profile (name,idea,cost)
+- create Business idaea (idea,cost)
 - add, Read, Update, Delete idea.
 - accept or reject the offers . 
+- can update the offers
 
 
  
