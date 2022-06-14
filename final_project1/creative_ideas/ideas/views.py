@@ -66,7 +66,9 @@ def update_Business_idaea(request : Request, business_id):
     '''
     idea owner update new idea , cost but must be register , login and have permission
     '''
-    if not request.user.is_authenticated or not request.user.has_perm('ideas.add_business_idaea'):
+    idea_owner: User = request.user
+    business_idea =Business_idaea.objects.get(id=business_id)
+    if not request.user.is_authenticated or not request.user.has_perm('ideas.add_business_idaea') or not idea_owner !=business_idea.idea_owner:
         return Response({"msg": "Not Allowed"}, status=status.HTTP_401_UNAUTHORIZED)
     request.data.update(idea_owner=request.user.id)
     business_idaea = Business_idaea.objects.get(id=business_id)
@@ -92,11 +94,13 @@ def delete_Business_idaea(request: Request, business_id):
     '''
     idea owner delete new idea , cost but must be register , login and have permission
     '''
-    if not request.user.is_authenticated or not request.user.has_perm('ideas.delete_business_idaea'):
+    idea_owner: User = request.user
+    business_idea = Business_idaea.objects.get(id=business_id)
+    if not request.user.is_authenticated or not request.user.has_perm('ideas.delete_business_idaea') or not idea_owner !=business_idea.idea_owner:
         return Response({"msg": "Not Allowed"}, status=status.HTTP_401_UNAUTHORIZED)
     request.data.update(idea_owner=request.user.id)
-    profile = Business_idaea.objects.get(id= business_id)
-    profile.delete()
+    business_idea = Business_idaea.objects.get(id= business_id)
+    business_idea.delete()
     return Response({"msg" : "Deleted Successfully"})
 
 
@@ -135,17 +139,20 @@ def list_comment(request : Request):
     '''
         investor view comment in idea
     '''
+
     if not request.user.is_authenticated or not request.user.has_perm('ideas.view_comment'):
         return Response({"msg": "Not Allowed"}, status=status.HTTP_401_UNAUTHORIZED)
-    request.data.update(investor=request.user.id)
-    comments = Comment.objects.all()
 
-    dataResponse = {
+    if Comment.objects.filter(investor=request.user.id).exists():
+        list_comments=Comment.objects.filter(investor=request.user.id)
+        data = {
         "msg" : "List of All comments",
-        "investor" : commentSerializer(instance=comments, many=True).data
-    }
+        "investor" : commentSerializer(instance=list_comments, many=True).data
+         }
 
-    return Response(dataResponse)
+        return Response(data)
+    else:
+        return Response({"msg":"notallowed"},status=status.HTTP_401_UNAUTHORIZED)
 
 
 
