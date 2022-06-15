@@ -34,5 +34,4 @@ Type of users: idea owner, investor, admin .
 
 
 
-
-https://creativebuss.herokuapp.com
+https://creative-ideas.herokuapp.com/
