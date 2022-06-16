@@ -13,7 +13,7 @@ Type of users: idea owner, investor, admin .
 - create Business idaea (idea,cost)
 - add, Read, Update, Delete idea.
 - accept or reject the offers . 
-- can update the offers
+
 
 
  
@@ -30,3 +30,8 @@ Type of users: idea owner, investor, admin .
 -  add, Read, Update, Delete idea owner.
 -  add, Read, Update, Delete investor.
 -  add, Read, Update, Delete profile. 
+
+
+
+
+https://creative-ideas.herokuapp.com/
