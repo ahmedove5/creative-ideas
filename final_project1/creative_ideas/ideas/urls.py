@@ -13,7 +13,6 @@ urlpatterns = [
     path("delete/comment/<comment_id>", views.delete_comment, name="delete_comment"),
     path("add/offers", views.add_offers, name="add_offers"),
     path("list/offers", views.list_offers, name="list_offers"),
-    path("update/offers/<offers_id>", views.update_offers, name="update_offers"),
     path("delete/offers/<offers_id>", views.delete_offers, name="delete_offers"),
     path("search/<idea>", views.search_ideas, name="search"),
 

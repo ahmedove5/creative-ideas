@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 import os
 from datetime import timedelta
 from pathlib import Path
+#import dj_database_url
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -24,10 +25,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-=7v5p*j0ysvq@l(8s(p4#8r7+1t0%l#=j3=6z8%)odnkqo85)d'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['creative-ideas.herokuapp.com','127.0.0.1']
 
 
 # Application definition
@@ -138,7 +138,13 @@ SIMPLE_JWT = {
 STATIC_ROOT = os.path.join(BASE_DIR,'staticfiles')
 STATIC_URL = '/static/'
 
+
+# Read SECRET_KEY from an environment variable
+import os
+SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'cg#p$g+j9tax!#a3cup@1$8obt2_+&k3q+pmu)5%asj6yjpkag')
+DEBUG = os.environ.get('DJANGO_DEBUG', True)
+
 # Heroku: Update database configuration from $DATABASE_URL.
 import dj_database_url
-#db_from_env = dj_database_url.config(conn_max_age=500)
+db_from_env = dj_database_url.config(conn_max_age=500)
 #DATABASES['default'].update(db_from_env)

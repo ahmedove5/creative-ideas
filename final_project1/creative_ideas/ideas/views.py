@@ -42,7 +42,6 @@ def add_Business_idaea(request : Request):
 
 
 
-
 @api_view(['GET'])
 def list_Business_idaea(request : Request):
     '''
@@ -64,11 +63,10 @@ def list_Business_idaea(request : Request):
 @permission_classes([IsAuthenticated])
 def update_Business_idaea(request : Request, business_id):
     '''
-    idea owner update new idea , cost but must be register , login and have permission
+    idea owner update new idea , cost but must be register , login , have permission and same user
     '''
-    idea_owner: User = request.user
-    business_idea =Business_idaea.objects.get(id=business_id)
-    if not request.user.is_authenticated or not request.user.has_perm('ideas.add_business_idaea') or not idea_owner !=business_idea.idea_owner:
+
+    if not request.user.is_authenticated or not request.user.has_perm('ideas.add_business_idaea') :
         return Response({"msg": "Not Allowed"}, status=status.HTTP_401_UNAUTHORIZED)
     request.data.update(idea_owner=request.user.id)
     business_idaea = Business_idaea.objects.get(id=business_id)
@@ -202,7 +200,7 @@ def add_offers(request : Request):
 @api_view(['GET'])
 def list_offers(request : Request):
     '''
-            idea owner accept or view offers
+            idea owner  view offers
     '''
 
     offers = Offers.objects.all()
@@ -216,30 +214,6 @@ def list_offers(request : Request):
 
 
 
-@api_view(['PUT'])
-@authentication_classes([JWTAuthentication])
-@permission_classes([IsAuthenticated])
-def update_offers(request : Request, offers_id):
-    '''
-            idea owner update the offers  but must be register , login and have permission
-    '''
-
-    if not request.user.is_authenticated or not request.user.has_perm('ideas.change_offers'):
-        return Response({"msg": "Not Allowed"}, status=status.HTTP_401_UNAUTHORIZED)
-    request.data.update(idea_owner=request.user.id)
-    offers = Offers.objects.get(id=offers_id)
-
-    updated_offers= offersSerializer(instance=offers, data=request.data)
-    if updated_offers.is_valid():
-        updated_offers.save()
-        responseData = {
-            "msg" : "updated successefully"
-        }
-
-        return Response(responseData)
-    else:
-        print(updated_offers.errors)
-        return Response({"msg" : "bad request, cannot update"}, status=status.HTTP_400_BAD_REQUEST)
 
 
 
